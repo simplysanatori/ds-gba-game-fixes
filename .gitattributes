@@ -1,0 +1,7 @@
+*.ips binary
+*.bps binary
+*.ups binary
+*.xdelta binary
+*.jpg binary
+*.png binary
+*.cht text eol=lf
