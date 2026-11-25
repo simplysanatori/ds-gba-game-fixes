@@ -14,6 +14,8 @@ games/<ds|gba|gb>/<game>-<region>/
 catalog/mods.json                  list of mods and patches an app can install
 cheats/libretro-index.tsv          which libretro-database cheat file is which ROM (built, see below)
 tools/build_cheats_index.py        builds that index offline; tools/test_build_cheats_index.py tests it
+widescreen/twilight-index.tsv      which of TWiLight Menu++'s widescreen hacks is for which ROM (built, see below)
+tools/build_widescreen_index.py    builds that index offline; tools/test_build_widescreen_index.py tests it
 catalog/textures.json              list of texture packs an app can install
 docs/USER_GUIDE.md                 patches and cheats, shared by all games
 ```
@@ -33,6 +35,14 @@ Both start empty. They keep the top-level shape of the ones in 3ds-game-fixes (`
 The apps' Cheats tab downloads cheats for DS, GBA and Game Boy games from [libretro-database](https://github.com/libretro/libretro-database) (`cht/`, CC-BY-SA-4.0). No cheat file of libretro's is stored here. The index is derived from libretro-database's No-Intro DATs and the names of its cht files, so it is shared under CC-BY-SA-4.0 (its header says so, names the source and the commit, and states the change: reduced to game code, CRC32 and file name). The repository's MIT licence covers the tools, not the index. `cheats/libretro-index.tsv` says which of its files belongs to which ROM: one line a game, `<nds|gba|gb|gbc> TAB <game code or -> TAB <CRC32 of the whole ROM file> TAB <cht file name>`, under a header naming the libretro commit it was built for. The app pins both this repo's commit and that one, and reads the index only from the pinned commit.
 
 To rebuild it, take a libretro-database checkout at the commit to pin, and run `python3 -I tools/build_cheats_index.py --libretro-commit <commit> --system nds "<metadat/no-intro/Nintendo - Nintendo DS.dat>" "<cht/Nintendo - Nintendo DS>" ...` for `nds`, `gba`, `gbc` and `gb`, with `--out cheats/libretro-index.tsv`. `--check <file>` checks an index by the app's rules. `cheats/libretro-index.example.tsv` is a short real example. After a rebuild, push, then pin the new commit in the app (`kFixesCommit` and `kLibretroCommit` in `frame_cores/cheat_db.h`).
+
+## Widescreen index
+
+`widescreen/twilight-index.tsv` lists the widescreen hacks in [TWiLight Menu++](https://github.com/DS-Homebrew/TWiLightMenu) (`resources/widescreen`, GPL-3.0) at one commit: `<game code> TAB <CRC16 of the header, FFFF any> TAB <file name> TAB <size> TAB <git blob SHA-1> TAB <SHA-256> TAB <name or ->`. No hack is stored here. The index is under GPL-3.0 as its source (`widescreen/README.md` has the credits); the repository's MIT licence covers the tools, not the index.
+
+A hack is raw Action Replay code (pairs of 32-bit little-endian words). Every hack writes what the game needs for a 16:10 picture (values 1.2 times the game's own), because the 3DS's widescreen mode shows the DS top screen at 384x240. Some of them read `04000304` to keep 4:3 for what is on the touch screen. A file with any other kind of code than the builder's list is left out, and an empty file (for a ROM a separate patch made wide already) is kept with size 0.
+
+To rebuild it, save the GitHub API's tree of `resources/widescreen` at the commit to pin (one request, address in the tool), check out the same commit, and run `python3 -I tools/build_widescreen_index.py --commit <commit> --tree tree.json --files <checkout>/resources/widescreen --list "<checkout>/7zfile/3DS - CFW users/Games supported with widescreen.txt" --codes cheats/libretro-index.tsv --out widescreen/twilight-index.tsv`. `--check <file>` checks an index by the app's rules. The app carries a copy of the index, as it does of 3ds-game-fixes' catalogues: after a rebuild, replace that copy.
 
 ## Rules for a fix
 

@@ -10,6 +10,10 @@ There are no fixes here yet.
 - GBA: none yet
 - Game Boy and Game Boy Color: none yet
 
+## Widescreen
+
+- [Widescreen for DS games](widescreen/README.md): which of TWiLight Menu++'s 16:10 hacks is for which game
+
 ## Texture packs
 
 None yet.
@@ -40,7 +44,7 @@ https://ko-fi.com/sana748653
 
 ## Licence
 
-MIT, for the fixes made here. Linked work by other people keeps its own licence.
+MIT, for the fixes made here. Linked work by other people keeps its own licence, and the cheats and widescreen indexes keep their sources' (see their pages).
 
 ## How this was made
 
