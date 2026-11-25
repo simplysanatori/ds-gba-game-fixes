@@ -1,0 +1,14 @@
+azahar-cheat-index 1
+libretro f89f09cbe13f9f7863ecf20d0ebf2c5ce53be029
+# Example: seven real entries. The real index is built by tools/build_cheats_index.py from libretro-database
+# (https://github.com/libretro/libretro-database, CC-BY-SA-4.0) at the commit above: its No-Intro DATs
+# (metadat/no-intro) and the names of its cht files.
+# Changes: reduced to game code, CRC32 and cht file name, matched by name.
+# Shared under CC-BY-SA-4.0, as that licence requires; no cheat file is copied here.
+nds	BJBF	1FCCF595	007 - Blood Stone (France)
+nds	IPKE	C180A0E9	Pokemon - HeartGold Version (USA)
+gba	A7OE	56C83C16	007 - NightFire (USA, Europe) (Code Breaker)
+gba	BPEE	1F1C08FB	Pokemon - Emerald Version (USA, Europe) (Code Breaker)
+gba	BPRE	84EE4776	Pokemon - FireRed Version (USA, Europe) (Rev 1)
+gbc	-	E038E666	007 - The World Is Not Enough (USA, Europe)
+gbc	-	87431672	1942 (USA, Europe)

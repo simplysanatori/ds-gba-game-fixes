@@ -12,6 +12,8 @@ games/<ds|gba|gb>/<game>-<region>/
   cheats/<game code>.cht           RetroArch .cht format
   images/                          before/after screenshots
 catalog/mods.json                  list of mods and patches an app can install
+cheats/libretro-index.tsv          which libretro-database cheat file is which ROM (built, see below)
+tools/build_cheats_index.py        builds that index offline; tools/test_build_cheats_index.py tests it
 catalog/textures.json              list of texture packs an app can install
 docs/USER_GUIDE.md                 patches and cheats, shared by all games
 ```
@@ -25,6 +27,12 @@ docs/USER_GUIDE.md                 patches and cheats, shared by all games
 ## Catalogues
 
 Both start empty. They keep the top-level shape of the ones in 3ds-game-fixes (`schema`, `mods` and `versions`; `schema` and `packs`), so the same tools can read them. Entries name games with `game_codes` in place of `title_ids`. Nothing reads them yet, so the entry format may still change.
+
+## Cheat index
+
+The apps' Cheats tab downloads cheats for DS, GBA and Game Boy games from [libretro-database](https://github.com/libretro/libretro-database) (`cht/`, CC-BY-SA-4.0). No cheat file of libretro's is stored here. The index is derived from libretro-database's No-Intro DATs and the names of its cht files, so it is shared under CC-BY-SA-4.0 (its header says so, names the source and the commit, and states the change: reduced to game code, CRC32 and file name). The repository's MIT licence covers the tools, not the index. `cheats/libretro-index.tsv` says which of its files belongs to which ROM: one line a game, `<nds|gba|gb|gbc> TAB <game code or -> TAB <CRC32 of the whole ROM file> TAB <cht file name>`, under a header naming the libretro commit it was built for. The app pins both this repo's commit and that one, and reads the index only from the pinned commit.
+
+To rebuild it, take a libretro-database checkout at the commit to pin, and run `python3 -I tools/build_cheats_index.py --libretro-commit <commit> --system nds "<metadat/no-intro/Nintendo - Nintendo DS.dat>" "<cht/Nintendo - Nintendo DS>" ...` for `nds`, `gba`, `gbc` and `gb`, with `--out cheats/libretro-index.tsv`. `--check <file>` checks an index by the app's rules. `cheats/libretro-index.example.tsv` is a short real example. After a rebuild, push, then pin the new commit in the app (`kFixesCommit` and `kLibretroCommit` in `frame_cores/cheat_db.h`).
 
 ## Rules for a fix
 
